@@ -12,5 +12,15 @@ namespace HegemotBooks.Data
         {
             
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<HegemotBooksUser>()
+                .HasOne(u => u.MembershipCard)
+                .WithOne(x => x.Owner);
+
+            base.OnModelCreating(builder);
+        }
+        }
     }
 }

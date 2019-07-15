@@ -20,10 +20,12 @@ namespace HegemotBooks.Web.Areas.Identity.Pages.Account
         public RegisterModel(
             UserManager<HegemotBooksUser> userManager,
             SignInManager<HegemotBooksUser> signInManager,
+            RoleManager<HegemotUserRole> roleManager,
             ILogger<RegisterModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
@@ -34,6 +36,10 @@ namespace HegemotBooks.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string FullName { get; set; }
+
             [Required]
             [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             public string Username { get; set; }
@@ -65,7 +71,7 @@ namespace HegemotBooks.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new HegemotBooksUser { UserName = Input.Email, Email = Input.Email };
+                var user = new HegemotBooksUser { UserName = Input.Username, Email = Input.Email, FullName = Input.FullName};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
