@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace HegemotBooks.Domain
@@ -10,5 +11,7 @@ namespace HegemotBooks.Domain
         public string MembershipCardId { get; set; }
 
         public MembershipCard MembershipCard { get; set; }
+
+        public List<Order> Orders { get; set; }
     }
 }

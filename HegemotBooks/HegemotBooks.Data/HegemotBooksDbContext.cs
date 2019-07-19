@@ -21,6 +21,5 @@ namespace HegemotBooks.Data
 
             base.OnModelCreating(builder);
         }
-        }
     }
 }
