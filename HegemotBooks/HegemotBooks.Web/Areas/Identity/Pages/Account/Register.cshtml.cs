@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using HegemotBooks.Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -72,7 +73,18 @@ namespace HegemotBooks.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new HegemotBooksUser { UserName = Input.Username, Email = Input.Email, FullName = Input.FullName};
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                if (_userManager.Users.Count() == 1)
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "User");
+                }
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");

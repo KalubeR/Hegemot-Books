@@ -1,4 +1,5 @@
 ﻿using HegemotBooks.Data;
+using HegemotBooks.Data.Seeding;
 using HegemotBooks.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HegemotBooks.Web.Data;
+using HegemotBooks.Web.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,6 +37,9 @@ namespace HegemotBooks.Web
             services.AddDbContext<HegemotBooksDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<HegemotAdminUserSeeder>();
+            services.AddScoped<HegemotUserRoleSeeder>();
+
             services.AddIdentity<HegemotBooksUser, HegemotUserRole>()
                 .AddEntityFrameworkStores<HegemotBooksDbContext>()
                 .AddDefaultTokenProviders();
@@ -57,13 +62,15 @@ namespace HegemotBooks.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetRequiredService<HegemotBooksDbContext>())
-                {
-                    context.Database.EnsureCreated();
-                }
-            }
+            app.UseDatabaseSeeding();
+
+            //using (var serviceScope = app.ApplicationServices.CreateScope())
+            //{
+            //    using (var context = serviceScope.ServiceProvider.GetRequiredService<HegemotBooksDbContext>())
+            //    {
+            //        context.Database.EnsureCreated();
+            //    }
+            //}
 
             if (env.IsDevelopment())
             {

@@ -7,6 +7,14 @@ namespace HegemotBooks.Data
 {
     public class HegemotBooksDbContext : IdentityDbContext<HegemotBooksUser, HegemotUserRole, string>
     {
+        public DbSet<Book> Books { get; set; }
+
+        public DbSet<MembershipCard> MembershipCards { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Receipt> Receipts { get; set; }
+
         public HegemotBooksDbContext(DbContextOptions<HegemotBooksDbContext> options)
             : base(options)
         {
